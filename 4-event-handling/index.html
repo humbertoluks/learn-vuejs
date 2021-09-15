@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+  <title>Modificadores de eventos</title>
+</head>
+<body>
+  <div id="app">
+    <p v-on:click="onClick('p', $event)">
+      Curso de VueJs
+      <button v-on:click.stop="onClick('button', $event)">Clique</button>
+    </p>
+    <form>
+      <input type="text">
+      <button type="submit" v-on:click="onSubmit">Enviar sem modificador</button>
+      <button type="submit" v-on:click.prevent="onSubmit">Enviar com modificador</button>
+    </form>
+  </div>
+</body>
+<script>
+  var vm = new Vue ({
+    el: '#app',
+    methods: {
+      onClick( elementoAlvo, event ) {
+        console.log(event.type, ':', elementoAlvo);
+      },
+      onSubmit( event ) {
+        console.log('Formulário enviado!');
+      }
+    }
+  })
+</script>
+</html>
