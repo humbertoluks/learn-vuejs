@@ -8,11 +8,14 @@
 
       <div class="list-group list-group-flush">
         
-        <FilmesListaIten 
-            v-for="(filme, index) in filmes"
-            :key="index"
-            :filmeTitulo="filme"
+        <FilmesListaIten
+            @selecionarFilme = "filmeSelecionado = $event"
+            v-for = "filme in filmes"
+            :key = "filme.Id"
+            :filme = "filme"
+            :class = "aplicarClasseActiva(filme)"
         />
+
       </div>
     </div>
 
@@ -37,13 +40,21 @@ export default {
     FilmesListaItenInfo
   },
   data() {
-      return {
-          filmes: [
-              'Vingadores: Guerra Infinita',
-              'Homem Formiga e Vespa',
-              'Pantera Negra'
-          ]
+    return {
+        filmes: [
+            {Id: 1, Titulo: 'Vingadores: Guerra Infinita', Ano: 2019},
+            {Id: 2, Titulo: 'Homem Formiga e Vespa', Ano: 2019},
+            {Id: 3, Titulo: 'Pantera Negra', Ano: 2019},
+            {Id: 4, Titulo: 'Dead Pool 2', Ano: 2019}
+        ],
+        filmeSelecionado: undefined
+    }
+  },
+  methods: {
+      aplicarClasseActiva(filmeIterado) {
+          return { active: this.filmeSelecionado && this.filmeSelecionado.Id === filmeIterado.Id}
       }
   }
+
 }
 </script>
