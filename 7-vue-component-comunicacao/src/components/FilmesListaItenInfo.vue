@@ -4,8 +4,8 @@
 
         <div class="card" v-if="filme">
             <div class="card-body">
-                <h5 class="card-title">{{ filme.Titulo }} | {{ filme.Ano }}</h5>
-                <button class="btn btn-light float-right">Editar</button>
+                <h5 class="card-title">{{ filme.titulo }} | {{ filme.ano }}</h5>
+                <button @click="editar" class="btn btn-light float-right">Editar</button>
             </div>
         </div>
 
@@ -20,6 +20,11 @@ export default {
     data() {
         return {
             filme : undefined
+        }
+    },
+    methods: {
+        editar(){
+            this.$emit('editarFilme', this.filme)
         }
     },
     created() {

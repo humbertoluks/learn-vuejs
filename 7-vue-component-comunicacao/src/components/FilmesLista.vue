@@ -22,8 +22,15 @@
     <!-- coluna 2 -->
     <div class="col-4">
 
-      <FilmesListaItenInfo :filme="filmeSelecionado"/>
+        <FilmesListaItenInfo
+            v-if="!editar" 
+            :filme="filmeSelecionado"
+            @editarFilme="editarFilme"/>
 
+        <FilmesListaItenEditar 
+            v-else
+            :filme="filmeSelecionado"
+        />
     </div>
 
   </div>
@@ -33,28 +40,47 @@
 
 import FilmesListaIten from './FilmesListaIten.vue'
 import FilmesListaItenInfo from './FilmesListaItenInfo.vue'
+import FilmesListaItenEditar from './FilmesListaItenEditar.vue'
+import { eventBus } from '../main'
 
 export default {
   components: {
     FilmesListaIten,
-    FilmesListaItenInfo
+    FilmesListaItenInfo,
+    FilmesListaItenEditar
   },
   data() {
     return {
         filmes: [
-            {Id: 1, Titulo: 'Vingadores: Guerra Infinita', Ano: 2019},
-            {Id: 2, Titulo: 'Homem Formiga e Vespa', Ano: 2019},
-            {Id: 3, Titulo: 'Pantera Negra', Ano: 2019},
-            {Id: 4, Titulo: 'Dead Pool 2', Ano: 2019}
+            {id: 1, titulo: 'Vingadores: Guerra Infinita',ano: 2019},
+            {id: 2, titulo: 'Homem Formiga e Vespa', ano: 2018},
+            {id: 3, titulo: 'Pantera Negra', ano: 2019},
+            {id: 4, titulo: 'Dead Pool 2', ano: 2020}
         ],
-        filmeSelecionado: undefined
+        filmeSelecionado: undefined,
+        editar: false
     }
   },
   methods: {
       aplicarClasseActiva(filmeIterado) {
-          return { active: this.filmeSelecionado && this.filmeSelecionado.Id === filmeIterado.Id}
+          return { active: this.filmeSelecionado && this.filmeSelecionado.id === filmeIterado.id}
+      },
+      editarFilme(filme) {
+          this.editar =true;
+          this.filmeSelecionado = filme
+      },
+      atualizarFilme(filmeAtualizado) {
+          const indice = this.filmes.findIndex(filme => filme.id === filmeAtualizado.id)
+          this.filmes.splice(indice, 1, filmeAtualizado)
+          this.filmeSelecionado = undefined
+          this.editar = false
       }
-  }
-
+  },
+  created() {
+      eventBus.$on('selecionarFilme', (filmeSelecionado) => {
+          this.filmeSelecionado = filmeSelecionado
+      }),
+      eventBus.$on('atualizarFilme', this.atualizarFilme)
+  } 
 }
 </script>
